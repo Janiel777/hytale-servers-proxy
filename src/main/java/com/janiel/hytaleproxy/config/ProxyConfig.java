@@ -5,6 +5,8 @@ import java.util.Map;
 public final class ProxyConfig {
     public String defaultServer;
     public Map<String, ServerConfig> servers;
+    public ServerConfig proxyListen;
+
 
     public ProxyConfig() {
     }
@@ -19,6 +21,10 @@ public final class ProxyConfig {
         if (!servers.containsKey(defaultServer)) {
             throw new IllegalArgumentException("config.yaml: default server '" + defaultServer + "' not found in servers: " + servers.keySet());
         }
+        if (proxyListen == null) {
+            throw new IllegalArgumentException("config.yaml: 'proxyListen' is required.");
+        }
+        proxyListen.validateOrThrow("proxyListen");
 
         for (Map.Entry<String, ServerConfig> e : servers.entrySet()) {
             String id = e.getKey();

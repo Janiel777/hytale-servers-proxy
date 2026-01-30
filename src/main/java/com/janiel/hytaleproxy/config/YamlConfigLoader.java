@@ -30,6 +30,24 @@ public final class YamlConfigLoader {
             cfg.defaultServer = s;
         }
 
+        Object proxyListenObj = raw.get("proxyListen");
+        if (proxyListenObj instanceof Map<?, ?> listenFields) {
+            ServerConfig sc = new ServerConfig();
+
+            Object host = listenFields.get("host");
+            if (host != null) sc.host = String.valueOf(host);
+
+            Object port = listenFields.get("port");
+            if (port instanceof Number n) {
+                sc.port = n.intValue();
+            } else if (port instanceof String ps) {
+                try { sc.port = Integer.parseInt(ps); } catch (NumberFormatException ignored) {}
+            }
+
+            cfg.proxyListen = sc;
+        }
+
+
         Object serversObj = raw.get("servers");
         if (serversObj instanceof Map<?, ?> serversMap) {
             // Convert each entry to ServerConfig

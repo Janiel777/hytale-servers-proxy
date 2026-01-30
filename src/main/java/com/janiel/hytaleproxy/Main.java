@@ -3,6 +3,7 @@ package com.janiel.hytaleproxy;
 import com.janiel.hytaleproxy.config.ProxyConfig;
 import com.janiel.hytaleproxy.config.ServerConfig;
 import com.janiel.hytaleproxy.config.YamlConfigLoader;
+import com.janiel.hytaleproxy.quic.UdpSniffer;
 
 import java.time.Instant;
 import java.util.Map;
@@ -26,7 +27,11 @@ public final class Main {
                 System.out.println("  - " + id + " -> " + s.host + ":" + s.port + suffix);
             }
 
-            System.out.println("Bootstrap OK.");
+            String bindHost = cfg.proxyListen.host;
+            int bindPort = cfg.proxyListen.port;
+
+            System.out.println("Bootstrap OK. Starting UDP sniffer...");
+            UdpSniffer.run(bindHost, bindPort);
         } catch (Exception ex) {
             System.err.println("Bootstrap FAILED: " + ex.getMessage());
             ex.printStackTrace(System.err);
