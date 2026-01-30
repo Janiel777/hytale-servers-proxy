@@ -1,5 +1,0 @@
-default: "home"
-servers:
-  home: { host: 10.0.1.10, port: 12345 }
-  pve1:  { host: 10.0.1.11, port: 12345 }
-  pvp1:  { host: 10.0.1.12, port: 12345 }
