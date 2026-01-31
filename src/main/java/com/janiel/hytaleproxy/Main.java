@@ -27,15 +27,28 @@ public final class Main {
                 System.out.println("  - " + id + " -> " + s.host + ":" + s.port + suffix);
             }
 
-            String bindHost = cfg.proxyListen.host;
-            int bindPort = cfg.proxyListen.port;
+            System.out.println("Bootstrap OK. Starting UDP forwarders...");
 
-            System.out.println("Bootstrap OK. Starting UDP forwarder...");
+            for (Map.Entry<String, ServerConfig> e : cfg.listeners.entrySet()) {
+                String id = e.getKey();
+                ServerConfig listen = e.getValue();
+                ServerConfig backend = cfg.servers.get(id);
 
-            String serverHost = cfg.servers.get(cfg.defaultServer).host;
-            int serverPort = cfg.servers.get(cfg.defaultServer).port;
+                Thread t = new Thread(() -> {
+                    try {
+                        UdpForwarder.run(listen.host, listen.port, backend.host, backend.port);
+                    } catch (Exception ex) {
+                        System.err.println("[Main] Forwarder '" + id + "' failed: " + ex.getMessage());
+                        ex.printStackTrace(System.err);
+                    }
+                }, "forwarder-" + id);
 
-            UdpForwarder.run(bindHost, bindPort, serverHost, serverPort);
+                t.setDaemon(false);
+                t.start();
+
+                System.out.println("  - listener '" + id + "' udp://" + listen.host + ":" + listen.port
+                                   + " -> backend udp://" + backend.host + ":" + backend.port);
+            }
         } catch (Exception ex) {
             System.err.println("Bootstrap FAILED: " + ex.getMessage());
             ex.printStackTrace(System.err);

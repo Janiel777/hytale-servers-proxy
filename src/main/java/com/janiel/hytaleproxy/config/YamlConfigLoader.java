@@ -47,6 +47,32 @@ public final class YamlConfigLoader {
             cfg.proxyListen = sc;
         }
 
+        Object listenersObj = raw.get("listeners");
+        if (listenersObj instanceof Map<?, ?> listenersMap) {
+            cfg.listeners = new java.util.LinkedHashMap<>();
+            for (Map.Entry<?, ?> e : listenersMap.entrySet()) {
+                String id = String.valueOf(e.getKey());
+                Object val = e.getValue();
+                if (!(val instanceof Map<?, ?> fields)) {
+                    throw new IllegalArgumentException("config.yaml: listeners." + id + " must be a map with host/port.");
+                }
+
+                ServerConfig sc = new ServerConfig();
+
+                Object host = fields.get("host");
+                if (host != null) sc.host = String.valueOf(host);
+
+                Object port = fields.get("port");
+                if (port instanceof Number n) {
+                    sc.port = n.intValue();
+                } else if (port instanceof String ps) {
+                    try { sc.port = Integer.parseInt(ps); } catch (NumberFormatException ignored) {}
+                }
+
+                cfg.listeners.put(id, sc);
+            }
+        }
+
 
         Object serversObj = raw.get("servers");
         if (serversObj instanceof Map<?, ?> serversMap) {
