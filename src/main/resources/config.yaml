@@ -5,13 +5,19 @@ listeners:
   world2:
     host: "0.0.0.0"
     port: 5522
+  world3:
+    host: "0.0.0.0"
+    port: 5523
 
 default: "home"
 
 servers:
   home:
     host: "127.0.0.1"
-    port: 5520
+    port: 7001
   world2:
     host: "127.0.0.1"
-    port: 5524
+    port: 7002
+  world3:
+    host: "127.0.0.1"
+    port: 7003
