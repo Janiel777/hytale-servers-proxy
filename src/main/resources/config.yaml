@@ -1,5 +1,5 @@
 listeners:
-  home:
+  world1:
     host: "0.0.0.0"
     port: 5521
   world2:
@@ -9,10 +9,10 @@ listeners:
     host: "0.0.0.0"
     port: 5523
 
-default: "home"
+default: "world1"
 
 servers:
-  home:
+  world1:
     host: "127.0.0.1"
     port: 7001
   world2:
