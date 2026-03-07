@@ -8,6 +8,9 @@ listeners:
   world3:
     host: "0.0.0.0"
     port: 5523
+  router:
+    host: "0.0.0.0"
+    port: 5520
 
 default: "world1"
 
@@ -21,3 +24,6 @@ servers:
   world3:
     host: "127.0.0.1"
     port: 7003
+  router:
+    host: "127.0.0.1"
+    port: 7000
